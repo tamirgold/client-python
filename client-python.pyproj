@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3162ede9-7311-4d05-9cbe-c0e55f8942a0}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile />
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".grenrc.js" />
+    <Content Include="docs\requirements.txt" />
+    <Content Include="requirements.txt" />
+    <Content Include="test-requirements.txt" />
+    <Content Include="tests\data\internal_import_data.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="docs\conf.py" />
+    <Compile Include="examples\add_external_reference_to_report.py" />
+    <Compile Include="examples\add_label_to_malware.py" />
+    <Compile Include="examples\add_label_to_observable.py" />
+    <Compile Include="examples\add_organization_to_sector.py" />
+    <Compile Include="examples\add_tool_usage_to_intrusion-set.py" />
+    <Compile Include="examples\ask_enrichment_of_observable.py" />
+    <Compile Include="examples\cmd_line_tag_latest_indicators_of_threat.py" />
+    <Compile Include="examples\create_campaign_attributed-to_intrusion_set.py" />
+    <Compile Include="examples\create_file_with_hashes.py" />
+    <Compile Include="examples\create_incident_with_ttps_and_indicators.py" />
+    <Compile Include="examples\create_indicator_of_campaign.py" />
+    <Compile Include="examples\create_intrusion_set.py" />
+    <Compile Include="examples\create_ip_domain_resolution.py" />
+    <Compile Include="examples\create_marking_definition.py" />
+    <Compile Include="examples\create_observable_relationships.py" />
+    <Compile Include="examples\create_process_observable.py" />
+    <Compile Include="examples\create_report_with_author.py" />
+    <Compile Include="examples\delete_intrusion_set.py" />
+    <Compile Include="examples\delete_relation.py" />
+    <Compile Include="examples\export_async_of_indicators.py" />
+    <Compile Include="examples\export_async_of_malware.py" />
+    <Compile Include="examples\export_incidents_stix2.py" />
+    <Compile Include="examples\export_incident_stix2.py" />
+    <Compile Include="examples\export_intrusion_set_stix2.py" />
+    <Compile Include="examples\export_report_stix2.py" />
+    <Compile Include="examples\get_all_indicators_using_pagination.py" />
+    <Compile Include="examples\get_all_reports_using_pagination.py" />
+    <Compile Include="examples\get_attack_pattern_by_mitre_id.py" />
+    <Compile Include="examples\get_entity_by_name_or_alias.py" />
+    <Compile Include="examples\get_malwares_of_intrusion_set.py" />
+    <Compile Include="examples\get_marking_definitions.py" />
+    <Compile Include="examples\get_observables_search.py" />
+    <Compile Include="examples\get_observable_exact_match.py" />
+    <Compile Include="examples\get_reports_about_intrusion_set.py" />
+    <Compile Include="examples\import_stix2_file.py" />
+    <Compile Include="examples\search_attack_pattern.py" />
+    <Compile Include="examples\search_malware.py" />
+    <Compile Include="examples\update_entity_attribute.py" />
+    <Compile Include="examples\update_observable_attributes.py" />
+    <Compile Include="examples\upload_artifacts.py" />
+    <Compile Include="examples\upload_file.py" />
+    <Compile Include="examples\upload_file_to_intrusion_set.py" />
+    <Compile Include="pycti\api\opencti_api_client.py" />
+    <Compile Include="pycti\api\opencti_api_connector.py" />
+    <Compile Include="pycti\api\opencti_api_work.py" />
+    <Compile Include="pycti\api\__init__.py" />
+    <Compile Include="pycti\connector\opencti_connector.py" />
+    <Compile Include="pycti\connector\opencti_connector_helper.py" />
+    <Compile Include="pycti\connector\__init__.py" />
+    <Compile Include="pycti\entities\opencti_attack_pattern.py" />
+    <Compile Include="pycti\entities\opencti_campaign.py" />
+    <Compile Include="pycti\entities\opencti_channel.py" />
+    <Compile Include="pycti\entities\opencti_course_of_action.py" />
+    <Compile Include="pycti\entities\opencti_event.py" />
+    <Compile Include="pycti\entities\opencti_external_reference.py" />
+    <Compile Include="pycti\entities\opencti_identity.py" />
+    <Compile Include="pycti\entities\opencti_incident.py" />
+    <Compile Include="pycti\entities\opencti_indicator.py" />
+    <Compile Include="pycti\entities\opencti_infrastructure.py" />
+    <Compile Include="pycti\entities\opencti_intrusion_set.py" />
+    <Compile Include="pycti\entities\opencti_kill_chain_phase.py" />
+    <Compile Include="pycti\entities\opencti_label.py" />
+    <Compile Include="pycti\entities\opencti_language.py" />
+    <Compile Include="pycti\entities\opencti_location.py" />
+    <Compile Include="pycti\entities\opencti_malware.py" />
+    <Compile Include="pycti\entities\opencti_marking_definition.py" />
+    <Compile Include="pycti\entities\opencti_narrative.py" />
+    <Compile Include="pycti\entities\opencti_note.py" />
+    <Compile Include="pycti\entities\opencti_observed_data.py" />
+    <Compile Include="pycti\entities\opencti_opinion.py" />
+    <Compile Include="pycti\entities\opencti_report.py" />
+    <Compile Include="pycti\entities\opencti_stix.py" />
+    <Compile Include="pycti\entities\opencti_stix_core_object.py" />
+    <Compile Include="pycti\entities\opencti_stix_core_relationship.py" />
+    <Compile Include="pycti\entities\opencti_stix_cyber_observable.py" />
+    <Compile Include="pycti\entities\opencti_stix_cyber_observable_relationship.py" />
+    <Compile Include="pycti\entities\opencti_stix_domain_object.py" />
+    <Compile Include="pycti\entities\opencti_stix_object_or_stix_relationship.py" />
+    <Compile Include="pycti\entities\opencti_stix_sighting_relationship.py" />
+    <Compile Include="pycti\entities\opencti_threat_actor.py" />
+    <Compile Include="pycti\entities\opencti_tool.py" />
+    <Compile Include="pycti\entities\opencti_vulnerability.py" />
+    <Compile Include="pycti\entities\__init__.py" />
+    <Compile Include="pycti\utils\constants.py" />
+    <Compile Include="pycti\utils\opencti_stix2.py" />
+    <Compile Include="pycti\utils\opencti_stix2_splitter.py" />
+    <Compile Include="pycti\utils\opencti_stix2_update.py" />
+    <Compile Include="pycti\utils\opencti_stix2_utils.py" />
+    <Compile Include="pycti\utils\__init__.py" />
+    <Compile Include="pycti\__init__.py" />
+    <Compile Include="tests\01-unit\utils\test_constants.py" />
+    <Compile Include="tests\01-unit\utils\test_opencti_stix2.py" />
+    <Compile Include="tests\01-unit\utils\test_opencti_stix2_splitter.py" />
+    <Compile Include="tests\01-unit\utils\__init__.py" />
+    <Compile Include="tests\02-integration\connector\test_connector.py" />
+    <Compile Include="tests\02-integration\connector\__init__.py" />
+    <Compile Include="tests\02-integration\entities\test_entity_crud.py" />
+    <Compile Include="tests\02-integration\entities\test_entity_filter.py" />
+    <Compile Include="tests\02-integration\entities\test_indicators.py" />
+    <Compile Include="tests\02-integration\entities\__init__.py" />
+    <Compile Include="tests\02-integration\utils\test_stix_crud.py" />
+    <Compile Include="tests\02-integration\__init__.py" />
+    <Compile Include="tests\cases\connectors.py" />
+    <Compile Include="tests\cases\entities.py" />
+    <Compile Include="tests\cases\__init__.py" />
+    <Compile Include="tests\conftest.py" />
+    <Compile Include="tests\utils.py" />
+    <Compile Include="tests\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="docs" />
+    <Folder Include="examples" />
+    <Folder Include="pycti" />
+    <Folder Include="pycti\api" />
+    <Folder Include="pycti\connector" />
+    <Folder Include="pycti\entities" />
+    <Folder Include="pycti\utils" />
+    <Folder Include="tests" />
+    <Folder Include="tests\01-unit\" />
+    <Folder Include="tests\01-unit\utils" />
+    <Folder Include="tests\02-integration" />
+    <Folder Include="tests\02-integration\connector" />
+    <Folder Include="tests\02-integration\entities" />
+    <Folder Include="tests\02-integration\utils" />
+    <Folder Include="tests\cases" />
+    <Folder Include="tests\data" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
