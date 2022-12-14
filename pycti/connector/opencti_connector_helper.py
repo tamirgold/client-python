@@ -850,31 +850,31 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
                     else:
                         res.vulnerability_uniqe = res.vulnerability_uniqe+1
 
-        j_bundle  = json.dump(bundle)
-        bundle = parse(j_bundle,allow_custom=True)
-        print(type(bundle))
+        #j_bundle  = json.dump(bundle)
+        #bundle = parse(j_bundle,allow_custom=True)
+        #print(type(bundle))
 
-        opencti_api_client = self.api
+        #opencti_api_client = self.api
 
-        print("Test-"+self.connect_id)
+        #print("Test-"+self.connect_id)
 
-        stix2_splitter = OpenCTIStix2Splitter()
-        bundles = [bundle]
+        #stix2_splitter = OpenCTIStix2Splitter()
+        #bundles = [bundle]
 
-        logging.info("Test-"+self.connect_id)
+        #logging.info("Test-"+self.connect_id)
 
-        for m_bundle in bundles:
-            for item in m_bundle["objects"]:
-                i=5
+        #for m_bundle in bundles:
+        #    for item in m_bundle["objects"]:
+        #        i=5
 
-        for obj in bundles:
-            if obj.type=="Indicator":
-                #Search indicator in opencti DB
-                observables = opencti_api_client.stix_cyber_observable.list(search=obj.pattern)
+        #for obj in bundles:
+        #    if obj.type=="Indicator":
+        #        #Search indicator in opencti DB
+        #        observables = opencti_api_client.stix_cyber_observable.list(search=obj.pattern)
 
-        #Tamir Bypass
-        bundles = [bundle]
-        return bundles
+        ##Tamir Bypass
+        #bundles = [bundle]
+        #return bundles
 
         """send a stix2 bundle to the API
 
