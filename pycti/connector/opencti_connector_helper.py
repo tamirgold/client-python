@@ -22,6 +22,8 @@ from pycti.api.opencti_api_client import OpenCTIApiClient
 from pycti.connector.opencti_connector import OpenCTIConnector
 from pycti.utils.opencti_stix2_splitter import OpenCTIStix2Splitter
 
+from stix2 import Environment, MemoryStore,parse
+
 TRUTHY: List[str] = ["yes", "true", "True"]
 FALSY: List[str] = ["no", "false", "False"]
 
@@ -436,6 +438,8 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
     """
 
     def __init__(self, config: Dict) -> None:
+        #Tamir
+        self.env = Environment(store=MemoryStore())
         # Load API config
         self.opencti_url = get_config_variable(
             "OPENCTI_URL", ["opencti", "url"], config
@@ -775,9 +779,98 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
             .isoformat()
             .replace("+00:00", "Z")
         )
+    # Search for indicator by pattern 
+    def search_indicator(self,stix_object):
+        stix_objects_arr = []
+        filters=[{"key": "pattern", "values": [stix_object.pattern]}]
+        indicators = self.api.indicator.list(filters=filters,)
+        for indicator in indicators:
+            stix_indicator_entry = self.api.get_stix_content(indicator["id"])
+            stix_objects_arr.append(stix_indicator_entry)
+        return stix_objects_arr
+
+    def search_malware(self,stix_object):
+        stix_objects_arr = []
+        filters=[{"key": "name", "values": [stix_object.name]}]
+        malwares = self.api.malware.list(filters=filters)
+        for malware in malwares:
+            stix_malware_entry = self.api.get_stix_content(malware["id"])
+            stix_objects_arr.append(stix_malware_entry)
+        return stix_objects_arr
+
+    def search_vulnerability(self,stix_object):
+        stix_objects_arr = []
+        filters=[{"key": "name", "values": [stix_object.name]}]
+        vulnerabilitys = self.api.vulnerability.list(filters=filters)
+        for vulnerability in vulnerabilitys:
+            stix_vulnerability_entry = self.api.get_stix_content(vulnerability["id"])
+            stix_objects_arr.append(stix_vulnerability_entry)
+        return stix_objects_arr
 
     # Push Stix2 helper
+    from pycti import OpenCTIApiClient
     def send_stix2_bundle(self, bundle, **kwargs) -> list:
+
+        bundle_data = json.loads(bundle)
+        bundle_data = parse(bundle_data,allow_custom=True)
+        res={"indicator_dup":0,
+             "malware_dup":0,
+             "vulnerability_dup":0,
+             "indicator_uniqe":0,
+             "malware_uniqe":0,
+             "vulnerability_uniqe":0,
+            }
+        raw_data = {}
+        for item in bundle_data.objects:
+            raw_data[item["id"]] = item
+            if(item["type"] == "indicator"):
+                matched_db_items = self.search_indicator(item)
+                for db_item in matched_db_items:
+                    is_identicle = self.env.object_equivalence(db_item, item)
+                    if is_identicle:
+                        res.indicator_dup = res.indicator_dup+1
+                    else:
+                        res.indicator_uniqe = res.indicator_uniqe+1
+
+            elif(item["type"] == "malware"):
+                matched_db_items = self.search_malware(item)
+                for db_item in matched_db_items:
+                    is_identicle = self.env.object_equivalence(db_item, item)
+                    if is_identicle:
+                        res.malware_dup = res.malware_dup+1
+                    else:
+                        res.malware_uniqe = res.malware_uniqe+1
+
+            elif(item["type"] == "vulnerability"):
+                matched_db_items = self.search_vulnerability(item)
+                for db_item in matched_db_items:
+                    is_identicle = self.env.object_equivalence(db_item, item)
+                    if is_identicle:
+                        res.vulnerability_dup = res.vulnerability_dup+1
+                    else:
+                        res.vulnerability_uniqe = res.vulnerability_uniqe+1
+
+        j_bundle  = json.dump(bundle)
+        bundle = parse(j_bundle,allow_custom=True)
+        print(type(bundle))
+
+        opencti_api_client = self.api
+
+        print("Test-"+self.connect_id)
+
+        stix2_splitter = OpenCTIStix2Splitter()
+        bundles = [bundle]
+
+        logging.info("Test-"+self.connect_id)
+
+        for m_bundle in bundles:
+            for item in m_bundle["objects"]:
+                i=5
+
+        for obj in bundles:
+            if obj.type=="Indicator":
+                #Search indicator in opencti DB
+                observables = opencti_api_client.stix_cyber_observable.list(search=obj.pattern)
 
         #Tamir Bypass
         bundles = [bundle]

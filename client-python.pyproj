@@ -117,6 +117,7 @@
     <Compile Include="pycti\utils\opencti_stix2_splitter.py" />
     <Compile Include="pycti\utils\opencti_stix2_update.py" />
     <Compile Include="pycti\utils\opencti_stix2_utils.py" />
+    <Compile Include="pycti\utils\rvc_utils.py" />
     <Compile Include="pycti\utils\__init__.py" />
     <Compile Include="pycti\__init__.py" />
     <Compile Include="tests\01-unit\utils\test_constants.py" />
