@@ -778,6 +778,11 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
 
     # Push Stix2 helper
     def send_stix2_bundle(self, bundle, **kwargs) -> list:
+
+        #Tamir Bypass
+        bundles = [bundle]
+        return bundles
+
         """send a stix2 bundle to the API
 
         :param work_id: a valid work id
