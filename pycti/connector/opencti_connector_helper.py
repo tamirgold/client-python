@@ -16,6 +16,7 @@ from typing import Callable, Dict, List, Optional, Union
 
 import pika
 from pika.exceptions import NackError, UnroutableError
+from pycti.entities.opencti_indicator import Indicator
 from sseclient import SSEClient
 
 from pycti.api.opencti_api_client import OpenCTIApiClient
@@ -780,32 +781,41 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
             .replace("+00:00", "Z")
         )
     # Search for indicator by pattern 
-    def search_indicator(self,stix_object):
+    def indicator_exist(self,stix_object):
         stix_objects_arr = []
         filters=[{"key": "pattern", "values": [stix_object.pattern]}]
-        indicators = self.api.indicator.list(filters=filters,)
-        for indicator in indicators:
-            stix_indicator_entry = self.api.get_stix_content(indicator["id"])
-            stix_objects_arr.append(stix_indicator_entry)
-        return stix_objects_arr
+        indicators = self.api.indicator.read(filters=filters)
+        return indicators != None
+        #indicators = self.api.indicator.list(filters=filters)
+        #for indicator in indicators:
+        #    stix_indicator_entry = self.api.get_stix_content(indicator["id"])
+        #    stix_objects_arr.append(stix_indicator_entry)
+        #return stix_objects_arr
 
-    def search_malware(self,stix_object):
+    def malware_exist(self,stix_object):
         stix_objects_arr = []
         filters=[{"key": "name", "values": [stix_object.name]}]
-        malwares = self.api.malware.list(filters=filters)
-        for malware in malwares:
-            stix_malware_entry = self.api.get_stix_content(malware["id"])
-            stix_objects_arr.append(stix_malware_entry)
-        return stix_objects_arr
+        malwares = self.api.malware.read(filters=filters)
+        return malwares != None
 
-    def search_vulnerability(self,stix_object):
+        #malwares = self.api.malware.list(filters=filters)
+        #for malware in malwares:
+        #    stix_malware_entry = self.api.get_stix_content(malware["id"])
+        #    stix_objects_arr.append(stix_malware_entry)
+        #return stix_objects_arr
+
+    def vulnerability_exist(self,stix_object):
         stix_objects_arr = []
         filters=[{"key": "name", "values": [stix_object.name]}]
-        vulnerabilitys = self.api.vulnerability.list(filters=filters)
-        for vulnerability in vulnerabilitys:
-            stix_vulnerability_entry = self.api.get_stix_content(vulnerability["id"])
-            stix_objects_arr.append(stix_vulnerability_entry)
-        return stix_objects_arr
+        vulnerabilitys = self.api.vulnerability.read(filters=filters)
+        return vulnerabilitys != None
+
+
+        #vulnerabilitys = self.api.vulnerability.list(filters=filters)
+        #for vulnerability in vulnerabilitys:
+        #    stix_vulnerability_entry = self.api.get_stix_content(vulnerability["id"])
+        #    stix_objects_arr.append(stix_vulnerability_entry)
+        #return stix_objects_arr
 
     # Push Stix2 helper
     from pycti import OpenCTIApiClient
@@ -824,57 +834,29 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         for item in bundle_data.objects:
             raw_data[item["id"]] = item
             if(item["type"] == "indicator"):
-                matched_db_items = self.search_indicator(item)
-                for db_item in matched_db_items:
-                    is_identicle = self.env.object_equivalence(db_item, item)
-                    if is_identicle:
-                        res.indicator_dup = res.indicator_dup+1
-                    else:
-                        res.indicator_uniqe = res.indicator_uniqe+1
-
+                item_exist = self.indicator_exist(item)
+                if item_exist:
+                    res.indicator_dup += 1
+                else:
+                    res.indicator_uniqe += 1
             elif(item["type"] == "malware"):
-                matched_db_items = self.search_malware(item)
-                for db_item in matched_db_items:
-                    is_identicle = self.env.object_equivalence(db_item, item)
-                    if is_identicle:
-                        res.malware_dup = res.malware_dup+1
-                    else:
-                        res.malware_uniqe = res.malware_uniqe+1
+                item_exist = self.malware_exist(item)
+                if item_exist:
+                    res.malware_dup  += 1
+                else:
+                    res.malware_uniqe  += 1
 
             elif(item["type"] == "vulnerability"):
-                matched_db_items = self.search_vulnerability(item)
-                for db_item in matched_db_items:
-                    is_identicle = self.env.object_equivalence(db_item, item)
-                    if is_identicle:
-                        res.vulnerability_dup = res.vulnerability_dup+1
-                    else:
-                        res.vulnerability_uniqe = res.vulnerability_uniqe+1
+                item_exist = self.vulnerability_exist(item)
+                if item_exist:
+                    res.vulnerability_dup  += 1
+                else:
+                    res.vulnerability_uniqe  += 1
 
-        #j_bundle  = json.dump(bundle)
-        #bundle = parse(j_bundle,allow_custom=True)
-        #print(type(bundle))
-
-        #opencti_api_client = self.api
-
-        #print("Test-"+self.connect_id)
-
-        #stix2_splitter = OpenCTIStix2Splitter()
-        #bundles = [bundle]
-
-        #logging.info("Test-"+self.connect_id)
-
-        #for m_bundle in bundles:
-        #    for item in m_bundle["objects"]:
-        #        i=5
-
-        #for obj in bundles:
-        #    if obj.type=="Indicator":
-        #        #Search indicator in opencti DB
-        #        observables = opencti_api_client.stix_cyber_observable.list(search=obj.pattern)
-
+        return None 
         ##Tamir Bypass
         #bundles = [bundle]
-        #return bundles
+        
 
         """send a stix2 bundle to the API
 
