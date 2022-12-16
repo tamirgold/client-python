@@ -782,8 +782,7 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         )
     # Search for indicator by pattern 
     def indicator_exist(self,stix_object):
-        stix_objects_arr = []
-        filters=[{"key": "pattern", "values": [stix_object.pattern]}]
+        filters=[{"key": "pattern", "values": [stix_object.get('pattern')]}]
         indicators = self.api.indicator.read(filters=filters)
         return indicators != None
         #indicators = self.api.indicator.list(filters=filters)
@@ -793,8 +792,7 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         #return stix_objects_arr
 
     def malware_exist(self,stix_object):
-        stix_objects_arr = []
-        filters=[{"key": "name", "values": [stix_object.name]}]
+        filters=[{"key": "name", "values": [stix_object.get('name')]}]
         malwares = self.api.malware.read(filters=filters)
         return malwares != None
 
@@ -805,8 +803,7 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         #return stix_objects_arr
 
     def vulnerability_exist(self,stix_object):
-        stix_objects_arr = []
-        filters=[{"key": "name", "values": [stix_object.name]}]
+        filters=[{"key": "name", "values": [stix_object.get('name')]}]
         vulnerabilitys = self.api.vulnerability.read(filters=filters)
         return vulnerabilitys != None
 
@@ -818,9 +815,19 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         #return stix_objects_arr
 
     # Push Stix2 helper
-    from pycti import OpenCTIApiClient
+    #from pycti import OpenCTIApiClient
     def send_stix2_bundle(self, bundle, **kwargs) -> list:
-
+        #custom_attributes = """
+        #    id
+        #    pattern_type
+        #    created
+        #"""
+        #all_indicators = self.api.indicator.list(   
+        #                                            first=1000,
+        #                                            after=0,
+        #                                            customAttributes=custom_attributes,
+        #                                            withPagination=False,
+        #                                        )
         bundle_data = json.loads(bundle)
         bundle_data = parse(bundle_data,allow_custom=True)
         res={"indicator_dup":0,
@@ -828,7 +835,7 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
              "vulnerability_dup":0,
              "indicator_uniqe":0,
              "malware_uniqe":0,
-             "vulnerability_uniqe":0,
+             "vulnerability_uniqe":0
             }
         raw_data = {}
         for item in bundle_data.objects:
@@ -836,22 +843,22 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
             if(item["type"] == "indicator"):
                 item_exist = self.indicator_exist(item)
                 if item_exist:
-                    res.indicator_dup += 1
+                    res["indicator_dup"] += 1
                 else:
-                    res.indicator_uniqe += 1
+                    res["indicator_uniqe"] += 1
             elif(item["type"] == "malware"):
                 item_exist = self.malware_exist(item)
                 if item_exist:
-                    res.malware_dup  += 1
+                    res["malware_dup"]  += 1
                 else:
-                    res.malware_uniqe  += 1
+                    res["malware_uniqe"]  += 1
 
             elif(item["type"] == "vulnerability"):
                 item_exist = self.vulnerability_exist(item)
                 if item_exist:
-                    res.vulnerability_dup  += 1
+                    res["vulnerability_dup"]  += 1
                 else:
-                    res.vulnerability_uniqe  += 1
+                    res["vulnerability_uniqe"]  += 1
 
         return None 
         ##Tamir Bypass
