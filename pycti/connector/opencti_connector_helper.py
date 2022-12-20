@@ -780,39 +780,31 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
             .isoformat()
             .replace("+00:00", "Z")
         )
+
     # Search for indicator by pattern 
     def indicator_exist(self,stix_object):
         filters=[{"key": "pattern", "values": [stix_object.get('pattern')]}]
         indicators = self.api.indicator.read(filters=filters)
         return indicators != None
-        #indicators = self.api.indicator.list(filters=filters)
-        #for indicator in indicators:
-        #    stix_indicator_entry = self.api.get_stix_content(indicator["id"])
-        #    stix_objects_arr.append(stix_indicator_entry)
-        #return stix_objects_arr
 
+    # Search for malware by pattern 
     def malware_exist(self,stix_object):
         filters=[{"key": "name", "values": [stix_object.get('name')]}]
         malwares = self.api.malware.read(filters=filters)
         return malwares != None
 
-        #malwares = self.api.malware.list(filters=filters)
-        #for malware in malwares:
-        #    stix_malware_entry = self.api.get_stix_content(malware["id"])
-        #    stix_objects_arr.append(stix_malware_entry)
-        #return stix_objects_arr
-
+    # Search for vulnerability by pattern
     def vulnerability_exist(self,stix_object):
         filters=[{"key": "name", "values": [stix_object.get('name')]}]
         vulnerabilitys = self.api.vulnerability.read(filters=filters)
         return vulnerabilitys != None
 
+    # Search for report by pattern
+    def report_exist(self,stix_object):
+        filters=[{"key": "name", "values": [stix_object.get('name')]}]
+        reports = self.api.report.read(filters=filters)
+        return reports != None
 
-        #vulnerabilitys = self.api.vulnerability.list(filters=filters)
-        #for vulnerability in vulnerabilitys:
-        #    stix_vulnerability_entry = self.api.get_stix_content(vulnerability["id"])
-        #    stix_objects_arr.append(stix_vulnerability_entry)
-        #return stix_objects_arr
 
     # Push Stix2 helper
     #from pycti import OpenCTIApiClient
@@ -822,7 +814,7 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         #    pattern_type
         #    created
         ##"""
-        all_indicators = self.api.indicator.list(getAll=True)
+        #all_indicators = self.api.indicator.list(getAll=True)
 
         bundle_data = json.loads(bundle)
         bundle_data = parse(bundle_data,allow_custom=True)
@@ -831,7 +823,9 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
              "vulnerability_dup":0,
              "indicator_uniqe":0,
              "malware_uniqe":0,
-             "vulnerability_uniqe":0
+             "vulnerability_uniqe":0,
+             "report_dup":0,
+             "report_uniqe":0
             }
         raw_data = {}
         for item in bundle_data.objects:
@@ -856,7 +850,20 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
                 else:
                     res["vulnerability_uniqe"]  += 1
 
+            elif(item["type"] == "report"):
+                item_exist = self.report_exist(item)
+                if item_exist:
+                    res["report_dup"]  += 1
+                else:
+                    res["report_uniqe"]  += 1
+
+
+        #TODO: update external DB with the batch results 
+
+
         return None 
+
+
         ##Tamir Bypass
         #bundles = [bundle]
         
