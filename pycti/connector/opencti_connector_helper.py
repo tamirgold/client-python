@@ -821,13 +821,9 @@ class OpenCTIConnectorHelper:  # pylint: disable=too-many-public-methods
         #    id
         #    pattern_type
         #    created
-        #"""
-        #all_indicators = self.api.indicator.list(   
-        #                                            first=1000,
-        #                                            after=0,
-        #                                            customAttributes=custom_attributes,
-        #                                            withPagination=False,
-        #                                        )
+        ##"""
+        all_indicators = self.api.indicator.list(getAll=True)
+
         bundle_data = json.loads(bundle)
         bundle_data = parse(bundle_data,allow_custom=True)
         res={"indicator_dup":0,
